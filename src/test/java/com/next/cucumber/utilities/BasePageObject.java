@@ -10,7 +10,9 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import io.github.bonigarcia.wdm.WebDriverManager;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.openqa.selenium.support.ui.Select;
@@ -36,10 +38,25 @@ public class BasePageObject {
         // result = testCondition ? value1 (true): value2 (false);
         String browser = browser_maven != null ? browser_maven : browser_properties;
 
+        // prefer explicit system property -Dheadless=true/false, otherwise detect CI env
+        String headlessProp = System.getProperty("headless");
+        String ciEnv = System.getenv("CI");
+        boolean headless = headlessProp != null
+                ? Boolean.parseBoolean(headlessProp)
+                : (ciEnv != null && ciEnv.equalsIgnoreCase("true"));
+
         if (driver == null) {
             if (browser.equalsIgnoreCase("chrome")) {
+                ChromeOptions chromeOptions = new ChromeOptions();
+                chromeOptions.addArguments("start-maximized");
+            if (headless) {
+
+                chromeOptions.addArguments("--headless");
+                chromeOptions.addArguments("--disable-gpu");
+                chromeOptions.addArguments("--no-sandbox");
+            }
                 WebDriverManager.chromedriver().setup();
-                driver = new ChromeDriver();
+                driver = new ChromeDriver(chromeOptions);
             }if (browser.equalsIgnoreCase("firefox")) {
                 WebDriverManager.firefoxdriver().setup();
                 driver = new FirefoxDriver();
