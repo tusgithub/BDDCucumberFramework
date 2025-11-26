@@ -4,7 +4,7 @@ import java.io.IOException;
 import org.openqa.selenium.WebDriver;
 import com.next.cucumber.pageobjectmanager.PageObjectManager;
 
-public class TestContextSetupDI {
+public class TestContext {
 
     public WebDriver driver;
     public String landingPageProductName;
@@ -12,7 +12,7 @@ public class TestContextSetupDI {
     public BasePageObject basePageObject;
     public GeneralUtilities generalUtilities;
 
-    public TestContextSetupDI() throws IOException {
+    public TestContext() throws IOException {
         basePageObject = new BasePageObject();
         pageObjectManager = new PageObjectManager(basePageObject.webDriverManager());
         generalUtilities = new GeneralUtilities(basePageObject.webDriverManager());

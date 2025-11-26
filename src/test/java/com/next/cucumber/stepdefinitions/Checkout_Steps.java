@@ -12,11 +12,11 @@ public class Checkout_Steps {
     public WebDriver driver;
     public String landingPageProductName;
     public CheckoutPage checkoutPage;
-    TestContextSetupDI testContextSetup;
+    TestContext context;
 
-    public Checkout_Steps(TestContextSetupDI testContextSetup) {
-        this.testContextSetup = testContextSetup;
-        this.checkoutPage = testContextSetup.pageObjectManager.getCheckoutPage();
+    public Checkout_Steps(TestContext context) {
+        this.context = context;
+        this.checkoutPage = context.pageObjectManager.getCheckoutPage();
     }
 
     @Then("^User proceeds to Checkout and validate (.+) items in checkout page$")

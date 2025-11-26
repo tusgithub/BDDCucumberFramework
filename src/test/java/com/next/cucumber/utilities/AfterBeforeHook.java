@@ -12,20 +12,20 @@ import io.cucumber.java.Scenario;
 
 public class AfterBeforeHook {
 
-    TestContextSetupDI testContextSetup;
+    TestContext context;
 
 
-    public AfterBeforeHook(TestContextSetupDI testContextSetup) {
-        this.testContextSetup = testContextSetup;
+    public AfterBeforeHook(TestContext context) {
+        this.context = context;
     }
     @After
     public void afterScenario() throws IOException {
-        testContextSetup.basePageObject.webDriverManager().quit();
+        context.basePageObject.webDriverManager().quit();
     }
 
     @AfterStep
     public void AddScreenshot(Scenario scenario) throws IOException {
-        WebDriver driver = testContextSetup.basePageObject.webDriverManager();
+        WebDriver driver = context.basePageObject.webDriverManager();
         if(scenario.isFailed()) {
 
             File sourcepath = ((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
