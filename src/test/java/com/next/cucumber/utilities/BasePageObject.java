@@ -12,19 +12,24 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.openqa.selenium.support.ui.Select;
 
 public class BasePageObject {
 
-    WebDriver driver;
+    protected WebDriver driver;
+    protected WebDriverWait wait;
 
     public BasePageObject(){}
 
     public BasePageObject(WebDriver driver){
         this.driver = driver;
+        wait = new WebDriverWait(driver, Duration.ofSeconds(15));
+    }
+
+    public void load(String url){
+        driver.get(url);
     }
 
     public WebDriver webDriverManager() throws IOException {
@@ -49,19 +54,17 @@ public class BasePageObject {
             if (browser.equalsIgnoreCase("chrome")) {
                 ChromeOptions chromeOptions = new ChromeOptions();
                 chromeOptions.addArguments("start-maximized");
-            if (headless) {
-
-                chromeOptions.addArguments("--headless");
-                chromeOptions.addArguments("--disable-gpu");
-                chromeOptions.addArguments("--no-sandbox");
-            }
+                if (headless) {
+                    chromeOptions.addArguments("--headless");
+                    chromeOptions.addArguments("--disable-gpu");
+                    chromeOptions.addArguments("--no-sandbox");
+                }
                 WebDriverManager.chromedriver().setup();
                 driver = new ChromeDriver(chromeOptions);
             }if (browser.equalsIgnoreCase("firefox")) {
                 WebDriverManager.firefoxdriver().setup();
                 driver = new FirefoxDriver();
             }
-
             driver.manage().window().maximize();
             driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
             driver.get(url);
@@ -76,7 +79,7 @@ public class BasePageObject {
     private WebElement getElement(String locator){
         return driver.findElement(By.xpath(locator));
     }
-    
+
     private List<WebElement> getElements(String locator){
         return driver.findElements(By.xpath(locator));
     }
@@ -124,18 +127,27 @@ public class BasePageObject {
         System.out.println("Cleared the element");
     }
 
-    private void setExplicitWaitVisible(String locator, long Seconds){
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(Seconds));
+    private void setExplicitWaitVisible(String locator){
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(locator)));
     }
 
-    private void setExplicitWaitClickable(String locator, long Seconds){
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(Seconds));
+    private void setExplicitWaitClickable(String locator){
         wait.until(ExpectedConditions.elementToBeClickable(By.xpath(locator)));
     }
 
     private void setCustomImplicitWait(int seconds){
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(seconds));
+    }
+
+    public void waitForOverlaysToDisappear(By overlay){
+        List<WebElement> overlays = driver.findElements(overlay);
+        System.out.println("OVERLAY SIZE" + overlays.size());
+        if(!overlays.isEmpty()){
+            wait.until(ExpectedConditions.invisibilityOfAllElements(overlays));
+            System.out.println("OVERLAYS INVISIBLE");
+        } else{
+            System.out.println("OVERLAY NOT FOUND");
+        }
     }
 
 }

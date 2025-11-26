@@ -4,7 +4,7 @@ import com.next.cucumber.utilities.BasePageObject;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
-public class CheckoutPage extends BasePageObject {
+public class CheckoutPage {
 
     public WebDriver driver;
 
@@ -12,6 +12,7 @@ public class CheckoutPage extends BasePageObject {
     By checkOutButton = By.xpath("//button[contains(text(), 'PROCEED TO CHECKOUT')]");
     By promoBtn = By.className("promoBtn");
     By placeOrder = By.xpath("//button[contains(text(), 'Place Order')]");
+    By overlay = By.cssSelector(".blockUI.blockOverlay");
 
     public CheckoutPage() {
     }

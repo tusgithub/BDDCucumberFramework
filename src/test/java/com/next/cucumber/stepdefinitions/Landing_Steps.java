@@ -3,7 +3,7 @@ package com.next.cucumber.stepdefinitions;
 import org.openqa.selenium.WebDriver;
 import io.cucumber.java.en.*;
 import com.next.cucumber.pages.*;
-import com.next.cucumber.utilities.TestContextSetupDI;
+import com.next.cucumber.utilities.TestContext;
 import com.next.cucumber.utilities.AssertionLibrary;
 
 public class Landing_Steps {
@@ -11,11 +11,11 @@ public class Landing_Steps {
     public WebDriver driver;
     public String landingPageProductName;
     public LandingPage landingPage;
-    TestContextSetupDI testContextSetup;
+    TestContext context;
 
-    public Landing_Steps(TestContextSetupDI testContextSetup) {
-        this.testContextSetup = testContextSetup;
-        this.landingPage = testContextSetup.pageObjectManager.getLandingPage();
+    public Landing_Steps(TestContext context) {
+        this.context = context;
+        this.landingPage = context.pageObjectManager.getLandingPage();
     }
 
     @Given("User is on GreenCart Landing page")
@@ -28,8 +28,8 @@ public class Landing_Steps {
     public void user_searched_with_shortname_and_extracted_actual_name_of_product(String shortName) throws InterruptedException {
         landingPage.searchItem(shortName);
         Thread.sleep(2000);
-        testContextSetup.landingPageProductName = landingPage.getProductName().split("-")[0].trim();
-        System.out.println(testContextSetup.landingPageProductName + " is extracted from Home Page");
+        context.landingPageProductName = landingPage.getProductName().split("-")[0].trim();
+        System.out.println(context.landingPageProductName + " is extracted from Home Page");
     }
 
     @And("Added {string} items of the selected product to cart")
