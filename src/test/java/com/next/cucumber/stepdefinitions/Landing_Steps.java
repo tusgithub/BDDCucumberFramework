@@ -1,10 +1,10 @@
 package com.next.cucumber.stepdefinitions;
 
 import org.openqa.selenium.WebDriver;
-import org.testng.Assert;
 import io.cucumber.java.en.*;
 import com.next.cucumber.pages.*;
 import com.next.cucumber.utilities.TestContextSetupDI;
+import com.next.cucumber.utilities.AssertionLibrary;
 
 public class Landing_Steps {
 
@@ -20,7 +20,7 @@ public class Landing_Steps {
 
     @Given("User is on GreenCart Landing page")
     public void user_is_on_green_cart_landing_page() {
-        Assert.assertTrue(landingPage.getTitleLandingPage().contains("GreenKart"),"Landing page is not displayed");
+        AssertionLibrary.assertTrue(landingPage.getTitleLandingPage().contains("GreenKart"),"Landing page is not displayed");
         System.out.println("User is on Landing page");
     }
 
